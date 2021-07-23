@@ -38,7 +38,10 @@ export async function getStaticProps({ params }) {
   })
   return {
     props: { recipe: items[0], AMIR: 'HI' },
+    revalidate: 1
   }
+
+  //only after 10 seconds does it reach out to the content storge 
 }
 
 export default function RecipeDetails({ recipe, AMIR }) {
