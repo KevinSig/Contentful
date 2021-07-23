@@ -31,11 +31,20 @@ export const getStaticPaths = async () => {
 export async function getStaticProps({ params }) {
   // this is to fetch a single page, and will ingject into Recipe Details
   // get params from the context
-  //destructuring to get items from the array
+  //destructuring to get items from the array, if it gets data, the array length will be greater than 1
   const { items } = await client.getEntries({
     content_type: 'recipe',
     'fields.slug': params.slug,
   })
+  if (!items.length) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
   return {
     props: { recipe: items[0], AMIR: 'HI' },
     revalidate: 1,
