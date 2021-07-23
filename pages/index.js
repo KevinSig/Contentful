@@ -1,5 +1,7 @@
 import { createClient } from 'contentful'
 import RecipeCard from '../components/RecipeCard'
+import styled from 'styled-components'
+
 export async function getStaticProps() {
   //this is the function to grab data and inject that as props
   // this connects to the speci contentful space
@@ -18,12 +20,18 @@ export async function getStaticProps() {
   }
 }
 
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px 60px;
+`
+
 export default function Recipes({ recipes }) {
   return (
-    <div className='recipe-list'>
+    <Grid>
       {recipes.map(recipe => (
         <RecipeCard key={recipe.sys.id} recipe={recipe} />
       ))}
-    </div>
+    </Grid>
   )
 }
