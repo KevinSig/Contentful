@@ -1,6 +1,7 @@
 import { createClient } from 'contentful'
 import Image from 'next/image'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import Skeleton from '../../components/Skeleton'
 
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID, //porcess is from the vs code itself
@@ -20,11 +21,10 @@ export const getStaticPaths = async () => {
   })
 
   //returns an array of objects that are the different paths
-  //fallback false is a 404 page
 
   return {
     paths: paths,
-    fallback: false,
+    fallback: true, //dont return 404, instead return fallback , it re-runs get static props
   }
 }
 
@@ -38,7 +38,7 @@ export async function getStaticProps({ params }) {
   })
   return {
     props: { recipe: items[0], AMIR: 'HI' },
-    revalidate: 1
+    revalidate: 1,
   }
 
   //only after 10 seconds does it reach out to the content storge
@@ -48,6 +48,8 @@ export default function RecipeDetails({ recipe, AMIR }) {
   console.log(AMIR)
   console.log(recipe)
   // finding out all the paths and routes that will use this component as their page
+
+  if (!recipe) return <Skeleton />
 
   const { featuredImage, title, cookingTime, ingredients, method } =
     recipe.fields
@@ -102,4 +104,3 @@ export default function RecipeDetails({ recipe, AMIR }) {
     </div>
   )
 }
-
